@@ -1176,6 +1176,7 @@ angular.module('app', ['ui.router', 'ui.bootstrap'])
             dur5: Math.round(Duration[4]),
             datetime: $.format.date(new Date(), 'yyyy-MM-dd HH:mm:ss'),
             sort: sorted.join('|'),
+	    puresort : sorted,
             name: config['studyTitle'] + ' ' + config['_version'],
             npos: _.filter(statements, function(s) { return s.category === 'agree'; }).length,
             nneu: _.filter(statements, function(s) { return s.category === 'neutral'; }).length,
@@ -1202,6 +1203,12 @@ angular.module('app', ['ui.router', 'ui.bootstrap'])
                 ct++;
             }
         }
+	
+	
+	for (var i = 0; i < sorted.length; i++) {
+	    ret['question'+i] = sorted[i]
+	}
+
         return ret;
     }
 
@@ -1212,8 +1219,10 @@ angular.module('app', ['ui.router', 'ui.bootstrap'])
     };
 
     function submitViaPost() {
-        return $http.post(config['submitUrl'], $.param(makeParamsObject()), {
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+	console.log(typeof(makeParamsObject()))
+	console.log(makeParamsObject())
+        return $http.post(config['submitUrl'], JSON.stringify(makeParamsObject()), {
+            headers: {'Content-Type': 'application/json'}
         });
     }
 
